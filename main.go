@@ -10,6 +10,7 @@ import (
 func initializeRouter() {
 	r := mux.NewRouter()
 
+	r.HandleFunc("/api/users/{id}", GetUser).Methods("GET")
 	r.HandleFunc("/api/users", CreateUser).Methods("POST")
 	log.Fatal(http.ListenAndServe(":9000", r))
 }

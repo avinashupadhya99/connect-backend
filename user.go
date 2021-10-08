@@ -29,7 +29,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var user User
-	DB.First(&user, params["id"])
+	DB.Preload("Slots").First(&user, params["id"])
 	user.Password = ""
 	json.NewEncoder(w).Encode(user)
 }

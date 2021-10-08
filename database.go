@@ -20,4 +20,5 @@ func InitialMigration() {
 		panic("Cannot connect to DB")
 	}
 	DB.AutoMigrate(&User{})
+	DB.AutoMigrate(&Slot{})
 }

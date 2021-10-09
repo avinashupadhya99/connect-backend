@@ -8,3 +8,22 @@ func userInSlice(user User, users []*User) bool {
 	}
 	return false
 }
+
+func InterestsToStringArray(interests []Interest) []string {
+	var interestStringArray []string
+	for _, interest := range interests {
+		interestStringArray = append(interestStringArray, interest.Name)
+	}
+	return interestStringArray
+}
+
+func StringArrayToInterests(interestStringArray []string) []Interest {
+	var interests []Interest
+	for _, interestString := range interestStringArray {
+		var interest Interest
+		interest.Name = interestString
+		DB.FirstOrInit(&interest)
+		interests = append(interests, interest)
+	}
+	return interests
+}

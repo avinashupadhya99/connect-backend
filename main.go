@@ -5,11 +5,15 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
 func initializeRouter() {
 	r := mux.NewRouter()
+	credentials := handlers.AllowCredentials()
+	methods := handlers.AllowedMethods([]string{"POST"})
+	origins := handlers.AllowedOrigins([]string{"*"})
 
 	r.HandleFunc("/api/users/{id}", GetUser).Methods("GET")
 	r.HandleFunc("/api/users", CreateUser).Methods("POST")
@@ -22,7 +26,7 @@ func initializeRouter() {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	log.Fatal(http.ListenAndServe(":"+port, handlers.CORS(credentials, methods, origins)(r)))
 }
 
 func main() {

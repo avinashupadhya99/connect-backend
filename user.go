@@ -33,6 +33,16 @@ func GetMD5Hash(text string) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
+func GetUsers(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var users []User
+	DB.Find(&users)
+	for index, _ := range users {
+		users[index].Password = ""
+	}
+	json.NewEncoder(w).Encode(users)
+}
+
 func GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)

@@ -69,3 +69,30 @@ func GetSlot(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid date format, should be YYYY-MM-DD", http.StatusBadRequest)
 	}
 }
+
+func DeleteSlot(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var slot Slot
+	starttime := r.URL.Query().Get("starttime")
+	endtime := r.URL.Query().Get("endtime")
+	datestr := r.URL.Query().Get("date")
+	date, err := time.Parse("2006-01-02", datestr)
+	fmt.Println("date", date)
+
+	if err == nil {
+		DB.Where("start_time = ? AND end_time = ? AND date = ?", starttime, endtime, datestr).First(&slot)
+		// DB.Where(&Slot{StartTime: starttime, EndTime: endtime, Date: datatypes.Date(date)}).First(&slot)
+		fmt.Println(slot)
+		if reflect.DeepEqual(slot, Slot{}) {
+			message := fmt.Sprintf("No slot from %s to %s on %s", starttime, endtime, datestr)
+			http.Error(w, message, http.StatusBadRequest)
+		} else {
+			DB.Delete(&slot)
+			message := fmt.Sprintf("Slot from %s to %s on %s deleted", starttime, endtime, datestr)
+			json.NewEncoder(w).Encode(message)
+		}
+	} else {
+		log.Println(err.Error())
+		http.Error(w, "Invalid date format, should be YYYY-MM-DD", http.StatusBadRequest)
+	}
+}

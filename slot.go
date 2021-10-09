@@ -55,11 +55,14 @@ func GetSlot(w http.ResponseWriter, r *http.Request) {
 	var slot Slot
 	starttime := r.URL.Query().Get("starttime")
 	endtime := r.URL.Query().Get("endtime")
-	date, err := time.Parse("2006-01-02", r.URL.Query().Get("date"))
+	datestr := r.URL.Query().Get("date")
+	date, err := time.Parse("2006-01-02", datestr)
 	fmt.Println("date", date)
 
 	if err == nil {
-		DB.Preload("Users").Where(&Slot{StartTime: starttime, EndTime: endtime, Date: datatypes.Date(date)}).First(&slot)
+		// DB.Preload("Users").Where(&Slot{StartTime: starttime, EndTime: endtime, Date: datatypes.Date(date)}).First(&slot)
+		DB.Preload("Users").Where("start_time = ? AND end_time = ? AND date = ?", starttime, endtime, datestr).First(&slot)
+		slot.DateStr = datestr
 		json.NewEncoder(w).Encode(slot)
 	} else {
 		log.Println(err.Error())

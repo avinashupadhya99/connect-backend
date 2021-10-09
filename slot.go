@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"reflect"
 	"time"
 
 	"gorm.io/datatypes"
@@ -32,13 +33,15 @@ func BookSlot(w http.ResponseWriter, r *http.Request) {
 		DB.FirstOrInit(&slot)
 		var user User
 		DB.First(&user, slot.UserID)
-		fmt.Println(user)
-
-		if !userInSlice(user, slot.Users) {
-			slot.Users = append(slot.Users, &user)
+		if reflect.DeepEqual(user, User{}) {
+			http.Error(w, fmt.Sprintf("User with ID %d does not exist", slot.UserID), http.StatusBadRequest)
+		} else {
+			if !userInSlice(user, slot.Users) {
+				slot.Users = append(slot.Users, &user)
+			}
+			DB.Save(&slot)
+			json.NewEncoder(w).Encode(slot)
 		}
-		DB.Save(&slot)
-		json.NewEncoder(w).Encode(slot)
 		return
 	} else {
 		log.Println(err.Error())

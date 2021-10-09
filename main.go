@@ -11,8 +11,8 @@ import (
 
 func initializeRouter() {
 	r := mux.NewRouter()
-	credentials := handlers.AllowCredentials()
-	methods := handlers.AllowedMethods([]string{"POST"})
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"})
 	origins := handlers.AllowedOrigins([]string{"*"})
 
 	r.HandleFunc("/api/users/{id}", GetUser).Methods("GET")
@@ -26,7 +26,7 @@ func initializeRouter() {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, handlers.CORS(credentials, methods, origins)(r)))
+	log.Fatal(http.ListenAndServe(":"+port, handlers.CORS(headers, methods, origins)(r)))
 }
 
 func main() {

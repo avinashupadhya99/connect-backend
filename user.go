@@ -53,3 +53,18 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	user.Password = ""
 	json.NewEncoder(w).Encode(user)
 }
+
+func LoginUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var user User
+	json.NewDecoder(r.Body).Decode(&user)
+	passwordHash := GetMD5Hash(user.Password)
+	DB.Preload("Interests").Preload("Slots").First(&user)
+	if user.Password == passwordHash {
+		user.Password = ""
+		user.Interest = InterestsToStringArray(user.Interests)
+		json.NewEncoder(w).Encode(user)
+	} else {
+		http.Error(w, "Invalid credentials", http.StatusBadRequest)
+	}
+}

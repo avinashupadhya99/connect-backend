@@ -52,7 +52,7 @@ func ShuffleArray(array []*User) []*User {
 	return array
 }
 
-func sendEmail(name string, email string, matchName string, date string, time string) {
+func sendEmail(name string, email string, matchName string, matchEmail string, date string, time string) {
 	emailContent, fileErr := os.ReadFile("scheduled.html")
 	if fileErr == nil {
 		from := mail.NewEmail("Team Connect", "avinash@defhacks.co")
@@ -61,6 +61,7 @@ func sendEmail(name string, email string, matchName string, date string, time st
 		htmlContent := string(emailContent)
 		htmlContent = strings.Replace(htmlContent, "{user}", name, -1)
 		htmlContent = strings.Replace(htmlContent, "{user2}", matchName, -1)
+		htmlContent = strings.Replace(htmlContent, "{user2Email}", matchEmail, -1)
 		htmlContent = strings.Replace(htmlContent, "{date}", date, -1)
 		htmlContent = strings.Replace(htmlContent, "{time}", time, -1)
 		message := mail.NewSingleEmail(from, subject, to, "", htmlContent)

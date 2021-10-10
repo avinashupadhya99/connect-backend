@@ -62,7 +62,7 @@ func createMeetings() {
 						date, err := slot.Date.Value()
 						datestr := fmt.Sprintf("%s", date)
 						if err == nil && len(datestr) >= 10 {
-							sendEmail(user.FirstName+" "+user.LastName, user.Email, user2.FirstName+" "+user2.LastName, datestr, slot.StartTime)
+							sendEmail(user.FirstName+" "+user.LastName, user.Email, user2.FirstName+" "+user2.LastName, user2.Email, datestr, slot.StartTime)
 						}
 					}
 				}

@@ -30,12 +30,15 @@ func BookSlot(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("date", date)
 	if err == nil {
 		slot.Date = datatypes.Date(date)
-		DB.FirstOrInit(&slot)
 		var user User
 		DB.First(&user, slot.UserID)
 		if reflect.DeepEqual(user, User{}) {
 			http.Error(w, fmt.Sprintf("User with ID %d does not exist", slot.UserID), http.StatusBadRequest)
 		} else {
+			DB.Preload("Users").FirstOrInit(&slot)
+			for index := range slot.Users {
+				slot.Users[index].Password = ""
+			}
 			if !userInSlice(user, slot.Users) {
 				slot.Users = append(slot.Users, &user)
 			}

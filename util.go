@@ -27,7 +27,7 @@ func StringArrayToInterests(interestStringArray []string) []Interest {
 	for _, interestString := range interestStringArray {
 		var interest Interest
 		interest.Name = interestString
-		DB.FirstOrInit(&interest)
+		DB.Where("name = ?", interestString).FirstOrInit(&interest)
 		interests = append(interests, interest)
 	}
 	return interests

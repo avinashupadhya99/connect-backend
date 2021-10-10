@@ -19,6 +19,7 @@ func initializeRouter() {
 
 	r.HandleFunc("/api/users", GetUsers).Methods("GET")
 	r.HandleFunc("/api/users/{id}", GetUser).Methods("GET")
+	r.HandleFunc("/api/users/{id}/meetings", GetUserMeetings).Methods("GET")
 	r.HandleFunc("/api/users", CreateUser).Methods("POST")
 	r.HandleFunc("/api/users/login", LoginUser).Methods("POST")
 	r.HandleFunc("/api/slot/book", BookSlot).Methods("POST")

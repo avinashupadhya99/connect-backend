@@ -88,3 +88,20 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid credentials", http.StatusBadRequest)
 	}
 }
+
+func GetUserMeetings(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	var user User
+	DB.Preload("Meetings").First(&user, params["id"])
+	for index, meeting := range user.Meetings {
+		DB.Preload("Slot").Preload("Users").First(&meeting)
+		date, err := meeting.Slot.Date.Value()
+		datestr := fmt.Sprintf("%s", date)
+		if err == nil && len(datestr) >= 10 {
+			meeting.Slot.DateStr = datestr[0:10]
+		}
+		user.Meetings[index] = meeting
+	}
+	json.NewEncoder(w).Encode(user.Meetings)
+}

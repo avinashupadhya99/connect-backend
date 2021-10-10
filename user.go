@@ -37,7 +37,7 @@ func GetMD5Hash(text string) string {
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var users []User
-	DB.Find(&users)
+	DB.Preload("Interests").Preload("Slots").Find(&users)
 	for index := range users {
 		users[index].Password = ""
 	}

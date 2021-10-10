@@ -14,9 +14,8 @@ import (
 
 type Slot struct {
 	gorm.Model
-	StartTime string         `json:"starttime" gorm:"primaryKey"`
-	EndTime   string         `json:"endtime" gorm:"primaryKey"`
-	Date      datatypes.Date `json:"-" gorm:"primaryKey"`
+	StartTime string         `json:"starttime" gorm:"UNIQUE_INDEX:compositeindex;index;not null"`
+	Date      datatypes.Date `json:"-" gorm:"UNIQUE_INDEX:compositeindex;index;not null"`
 	DateStr   string         `json:"date" gorm:"-"`
 	Users     []*User        `json:"users" gorm:"many2many:slot_users;"`
 	UserID    int            `json:"userid" gorm:"-"`
@@ -35,7 +34,7 @@ func BookSlot(w http.ResponseWriter, r *http.Request) {
 		if reflect.DeepEqual(user, User{}) {
 			http.Error(w, fmt.Sprintf("User with ID %d does not exist", slot.UserID), http.StatusBadRequest)
 		} else {
-			DB.Preload("Users").FirstOrInit(&slot)
+			DB.Preload("Users").Where("start_time = ? AND date = ?", slot.StartTime, slot.DateStr).FirstOrInit(&slot)
 			for index := range slot.Users {
 				slot.Users[index].Password = ""
 			}
@@ -57,14 +56,13 @@ func GetSlot(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var slot Slot
 	starttime := r.URL.Query().Get("starttime")
-	endtime := r.URL.Query().Get("endtime")
 	datestr := r.URL.Query().Get("date")
 	date, err := time.Parse("2006-01-02", datestr)
 	fmt.Println("date", date)
 
 	if err == nil {
 		// DB.Preload("Users").Where(&Slot{StartTime: starttime, EndTime: endtime, Date: datatypes.Date(date)}).First(&slot)
-		DB.Preload("Users").Where("start_time = ? AND end_time = ? AND date = ?", starttime, endtime, datestr).First(&slot)
+		DB.Preload("Users").Where("start_time = ? AND date = ?", starttime, datestr).First(&slot)
 		slot.DateStr = datestr
 		json.NewEncoder(w).Encode(slot)
 	} else {
@@ -77,21 +75,20 @@ func DeleteSlot(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var slot Slot
 	starttime := r.URL.Query().Get("starttime")
-	endtime := r.URL.Query().Get("endtime")
 	datestr := r.URL.Query().Get("date")
 	date, err := time.Parse("2006-01-02", datestr)
 	fmt.Println("date", date)
 
 	if err == nil {
-		DB.Where("start_time = ? AND end_time = ? AND date = ?", starttime, endtime, datestr).First(&slot)
+		DB.Where("start_time = ? AND date = ?", starttime, datestr).First(&slot)
 		// DB.Where(&Slot{StartTime: starttime, EndTime: endtime, Date: datatypes.Date(date)}).First(&slot)
 		fmt.Println(slot)
 		if reflect.DeepEqual(slot, Slot{}) {
-			message := fmt.Sprintf("No slot from %s to %s on %s", starttime, endtime, datestr)
+			message := fmt.Sprintf("No slot at %s  on %s", starttime, datestr)
 			http.Error(w, message, http.StatusBadRequest)
 		} else {
 			DB.Delete(&slot)
-			message := fmt.Sprintf("Slot from %s to %s on %s deleted", starttime, endtime, datestr)
+			message := fmt.Sprintf("Slot at %s on %s deleted", starttime, datestr)
 			json.NewEncoder(w).Encode(message)
 		}
 	} else {

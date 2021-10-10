@@ -95,7 +95,7 @@ func GetUserMeetings(w http.ResponseWriter, r *http.Request) {
 	var user User
 	DB.Preload("Meetings").First(&user, params["id"])
 	for index, meeting := range user.Meetings {
-		DB.Preload("Slot").Preload("Users").First(&meeting)
+		DB.Preload("Interests").Preload("Slot").Preload("Users").First(&meeting)
 		date, err := meeting.Slot.Date.Value()
 		datestr := fmt.Sprintf("%s", date)
 		if err == nil && len(datestr) >= 10 {

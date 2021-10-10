@@ -37,7 +37,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var users []User
 	DB.Find(&users)
-	for index, _ := range users {
+	for index := range users {
 		users[index].Password = ""
 	}
 	json.NewEncoder(w).Encode(users)

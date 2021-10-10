@@ -59,6 +59,11 @@ func createMeetings() {
 						meeting.Users = append(meeting.Users, user2)
 						DB.Create(&meeting)
 						fmt.Printf("Meeting with ID %d created \n", meeting.ID)
+						date, err := slot.Date.Value()
+						datestr := fmt.Sprintf("%s", date)
+						if err == nil && len(datestr) >= 10 {
+							sendEmail(user.FirstName+" "+user.LastName, user.Email, user2.FirstName+" "+user2.LastName, datestr, slot.StartTime)
+						}
 					}
 				}
 			}

@@ -11,6 +11,7 @@ require (
 require (
 	github.com/felixge/httpsnoop v1.0.2 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/sendgrid/rest v2.6.5+incompatible // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 )
 
@@ -20,5 +21,6 @@ require (
 	github.com/gorilla/handlers v1.5.1
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.2 // indirect
+	github.com/sendgrid/sendgrid-go v3.10.2+incompatible
 	gorm.io/datatypes v1.0.2
 )

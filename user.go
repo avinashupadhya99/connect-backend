@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -49,6 +50,13 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var user User
 	DB.Preload("Interests").Preload("Slots").First(&user, params["id"])
+	for index := range user.Slots {
+		date, err := user.Slots[index].Date.Value()
+		datestr := fmt.Sprintf("%s", date)
+		if err == nil && len(datestr) >= 10 {
+			user.Slots[index].DateStr = datestr[0:10]
+		}
+	}
 	user.Password = ""
 	user.Interest = InterestsToStringArray(user.Interests)
 	json.NewEncoder(w).Encode(user)

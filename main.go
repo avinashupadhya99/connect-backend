@@ -22,6 +22,7 @@ func initializeRouter() {
 	r.HandleFunc("/api/users", CreateUser).Methods("POST")
 	r.HandleFunc("/api/users/login", LoginUser).Methods("POST")
 	r.HandleFunc("/api/slot/book", BookSlot).Methods("POST")
+	r.HandleFunc("/api/slot/unbook", UnBookSlot).Methods("DELETE")
 	r.HandleFunc("/api/slot", GetSlot).Methods("GET")
 	r.HandleFunc("/api/slot", DeleteSlot).Methods("DELETE")
 	port := os.Getenv("PORT")

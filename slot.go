@@ -96,3 +96,35 @@ func DeleteSlot(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid date format, should be YYYY-MM-DD", http.StatusBadRequest)
 	}
 }
+
+func UnBookSlot(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var slot Slot
+	starttime := r.URL.Query().Get("starttime")
+	datestr := r.URL.Query().Get("date")
+	date, err := time.Parse("2006-01-02", datestr)
+	userid := r.URL.Query().Get("userid")
+	fmt.Println("date", date)
+	var user User
+	if err == nil {
+		DB.Where("start_time = ? AND date = ?", starttime, datestr).First(&slot)
+		fmt.Println(slot)
+		if reflect.DeepEqual(slot, Slot{}) {
+			message := fmt.Sprintf("No slot at %s  on %s", starttime, datestr)
+			http.Error(w, message, http.StatusBadRequest)
+		} else {
+			DB.First(&user, userid)
+			if reflect.DeepEqual(user, User{}) {
+				message := fmt.Sprintf("No user with ID %s", userid)
+				http.Error(w, message, http.StatusBadRequest)
+			} else {
+				DB.Model(&user).Association("Slots").Delete(&slot)
+				message := fmt.Sprintf("Slot at %s on %s deleted for user %s", starttime, datestr, userid)
+				json.NewEncoder(w).Encode(message)
+			}
+		}
+	} else {
+		log.Println(err.Error())
+		http.Error(w, "Invalid date format, should be YYYY-MM-DD", http.StatusBadRequest)
+	}
+}

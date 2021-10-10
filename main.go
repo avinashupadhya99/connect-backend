@@ -4,7 +4,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/go-co-op/gocron"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -31,7 +33,14 @@ func initializeRouter() {
 	log.Fatal(http.ListenAndServe(":"+port, handlers.CORS(headers, methods, origins)(r)))
 }
 
+func InitializeCron() {
+	s := gocron.NewScheduler(time.UTC)
+	s.Every(1).Days().Do(createMeetings)
+	s.StartAsync()
+}
+
 func main() {
 	InitialMigration()
+	InitializeCron()
 	initializeRouter()
 }

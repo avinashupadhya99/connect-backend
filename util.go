@@ -33,14 +33,14 @@ func StringArrayToInterests(interestStringArray []string) []Interest {
 	return interests
 }
 
-func ShuffleArray(array []User) []User {
+func ShuffleArray(array []*User) []*User {
 	var randomIndex int
 	var temp User
 	for index := range array {
 		randomIndex = int(math.Floor(rand.Float64() * float64(index+1)))
-		temp = array[index]
-		array[index] = array[randomIndex]
-		array[randomIndex] = temp
+		temp = *array[index]
+		*array[index] = *array[randomIndex]
+		*array[randomIndex] = temp
 	}
 	return array
 }

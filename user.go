@@ -22,6 +22,7 @@ type User struct {
 	About     string     `json:"about"`
 	Interests []Interest `json:"-" gorm:"many2many:user_interests;"`
 	Interest  []string   `json:"interests" gorm:"-"`
+	Meetings  []*Meeting `json:"meetings" gorm:"many2many:meeting_users;"`
 }
 
 type Interest struct {

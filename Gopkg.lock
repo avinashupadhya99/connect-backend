@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:2b64581854ae098705f77c94def899a7ecc598042b256ac66b496299d40f6603"
+  name = "github.com/felixge/httpsnoop"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "42c30f944879059639bcf7b2ca4aba06f4a83198"
+  version = "v1.0.2"
+
+[[projects]]
   digest = "1:5a99059fffeb2f9df3bc82849e7ab48d63ce97c85c09f710b313558a4ecc565b"
   name = "github.com/go-co-op/gocron"
   packages = ["."]
@@ -16,6 +24,14 @@
   pruneopts = "UT"
   revision = "bcc459a906419e2890a50fc2c99ea6dd927a88f2"
   version = "v1.6.0"
+
+[[projects]]
+  digest = "1:9ff256c9dfa28d8fe056cce6babbd529862b0c340710c62881b80368b5bd5bbf"
+  name = "github.com/gorilla/handlers"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "d453effd20e6817a8acfd9d278dadd21371da0ba"
+  version = "v1.5.1"
 
 [[projects]]
   digest = "1:6078383dbb7405bfa3ce16957f37564e3b716afa29b6eb45ffdb6674624d1e0d"
@@ -53,6 +69,14 @@
   revision = "036812b2e83c0ddf193dd5a34e034151da389d09"
 
 [[projects]]
+  digest = "1:fe7d0b6fbd0d518f923964f40c365d85c77d626e84bdac505dfcf14b53630cd9"
+  name = "gorm.io/datatypes"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "5d4bc09793b59bb89f9bca5ff1869975ad9bd8d7"
+  version = "v1.0.2"
+
+[[projects]]
   digest = "1:0f589ec11152f3176f1533c59f0df377dee15ea6058fd3f58b52727c9dac6856"
   name = "gorm.io/driver/mysql"
   packages = ["."]
@@ -61,7 +85,7 @@
   version = "v1.1.2"
 
 [[projects]]
-  digest = "1:3461ac17a93c3302b9138670fa08563ad09111ca0bdd524910436cb8a6c05ad4"
+  digest = "1:4dd10edba1a5c139f7ccc815adca3a30477c60012e758d987fa6136b2d81b238"
   name = "gorm.io/gorm"
   packages = [
     ".",
@@ -73,15 +97,17 @@
     "utils",
   ]
   pruneopts = "UT"
-  revision = "04f049c1dac757c6fb93df863a9585b98fc8661b"
-  version = "v1.21.15"
+  revision = "418c60c83cf8472d883bb9ab8b9821444e7c8f0a"
+  version = "v1.21.16"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/go-co-op/gocron",
+    "github.com/gorilla/handlers",
     "github.com/gorilla/mux",
+    "gorm.io/datatypes",
     "gorm.io/driver/mysql",
     "gorm.io/gorm",
   ]

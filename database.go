@@ -22,4 +22,5 @@ func InitialMigration() {
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&Slot{})
 	DB.AutoMigrate(&Interest{})
+	DB.AutoMigrate(&Meeting{})
 }

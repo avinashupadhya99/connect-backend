@@ -14,6 +14,7 @@ type User struct {
 	gorm.Model
 	FirstName string     `json:"firstname"`
 	LastName  string     `json:"lastname"`
+	UserName  string     `json:"username"`
 	Email     string     `json:"email"`
 	Password  string     `json:"password"`
 	Slots     []*Slot    `json:"slots" gorm:"many2many:slot_users;"`

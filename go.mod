@@ -1,4 +1,4 @@
-module github.com/kravinashupadhyaya/connect-backend
+module github.com/avinashupadhya99/connect-backend
 
 go 1.17
 
